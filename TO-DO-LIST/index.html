@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>TO-DO-LIST</title>
+     <style>
+          * {
+               padding: 0;
+               margin: 0;
+               box-sizing: border-box;
+          }
+
+          body {
+               font-family: Arial, Helvetica, sans-serif;
+               background-color: #f5f5f5;
+          }
+
+          #form {
+               width: 50%;
+               margin: auto;
+               margin-top: 10px;
+
+          }
+
+          #form input {
+               width: 100%;
+               height: 40px;
+               margin-top: 20px;
+               padding-left: 10px;
+               font-size: 18px;
+               text-transform: capitalize;
+          }
+
+          input[type=submit] {
+               background-color: #0091ea;
+               color: #fff;
+               border: none;
+               border-radius: 5px;
+               font-size: 16px;
+               font-weight: bold;
+               cursor: pointer;
+          }
+
+          #container>div {
+               background-color: #fff;
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+               margin: 20px 0px;
+               padding: 20px;
+               box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+               border: 1px solid black;
+               border-radius: 5px;
+          }
+
+          #container>div>div:first-child {
+               width: 65%;
+          }
+
+          #container>div>div:last-child {
+               display: flex;
+               justify-content: space-between;
+               width: 30%;
+          }
+
+          #container>div>div:last-child>button {
+               padding: 6px 15px;
+               border: none;
+               border-radius: 5px;
+               cursor: pointer;
+               font-size: 16px;
+               font-weight: bold;
+               text-transform: capitalize;
+          }
+
+          #container>div>div:last-child>#btn1 {
+               background-color: #ff1744;
+               color: #fff;
+          }
+
+          #container>div>div:last-child>#btn2 {
+               background-color: #00c853;
+               color: #fff;
+          }
+
+          @media all and (min-width:320px) and (max-width:480px) {
+               #container>div {
+                    flex-direction: column;
+                    height: auto;
+                    text-align: center;
+                    width: 100%;
+               }
+
+               #form {
+                    width: 90%;
+                    margin: auto;
+                    margin-top: 10px;
+
+               }
+
+               #container>div>div:last-child {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    width: 100%;
+                    margin-top: 5px;
+
+               }
+
+               #container>div>div:last-child>button {
+                    width: 100%;
+                    margin: 5px 0px;
+               }
+
+               #form input {
+                    text-align: center;
+               }
+          }
+
+          h1 {
+               text-align: center;
+               margin-top: 30px;
+          }
+     </style>
+</head>
+
+<body>
+     <h1>TODO APP</h1>
+     <div id="form">
+          <input type="text" id="text" placeholder="add task">
+          <input type="submit" value="Add Task" id="" onclick="submit()">
+          <div id="container"></div>
+     </div>
+
+</body>
+
+</html>
+
+<script>
+     function Add(text) { this.text = text }
+     let submit = () => {
+          let text = document.getElementById("text").value;
+          let t = new Add(text)
+          let data = JSON.parse(localStorage.getItem("taskAdd")) || [];
+          data.push(t)
+          localStorage.setItem("taskAdd", JSON.stringify(data));
+          window.location.reload()
+     }
+     let append = (data) => {
+          data.forEach((el, index) => {
+               let container = document.getElementById("container")
+               let div = document.createElement("div")
+               let h2 = document.createElement("h2")
+               h2.innerText = el.text
+               let completed = document.createElement("button")
+               completed.setAttribute("id", "btn2")
+               completed.innerText = "completed"
+               completed.addEventListener("click", () => {
+                    div.style.border = "4px solid #64dd17"
+               })
+               let remove = document.createElement("button")
+               remove.setAttribute("id", "btn1")
+               remove.innerText = "remove"
+               remove.addEventListener("click", () => {
+                    data.splice(index, 1)
+                    console.log(data)
+                    localStorage.setItem("taskAdd", JSON.stringify(data))
+                    window.location.reload()
+               })
+               let div1 = document.createElement("div")
+               div1.append(h2)
+               let div2 = document.createElement("div")
+               div2.append(completed, remove)
+
+               div.append(div1, div2)
+               container.append(div)
+          })
+     }
+     let main = () => {
+          let data = JSON.parse(localStorage.getItem("taskAdd")) || [];
+          append(data)
+     }
+     main()
+
+</script>
